@@ -1,10 +1,11 @@
 @tailwind base;
 @tailwind components;
-body {
-  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);   /* darken hero */
+  pointer-events: none;
 }
 
 @tailwind utilities;
