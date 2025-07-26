@@ -4,7 +4,7 @@ import { auth } from './lib/firebase';
 
 import Header   from './components/Header';
 import TabBar   from './components/TabBar';
-import  Card from './components/Card';
+import Card from './components/Card';
 
 import Auth       from './components/Auth';
 import TaskForm   from './components/TaskForm';
