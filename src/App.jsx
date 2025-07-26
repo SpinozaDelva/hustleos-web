@@ -4,6 +4,8 @@ import { auth } from "./lib/firebase";
 import Auth from "./components/Auth";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
+import IncomeList from "./components/IncomeList";
+import IncomeForm from "./components/incomeform";
 
 export default function App() {
   const [user, loading] = useAuthState(auth);
@@ -16,6 +18,8 @@ export default function App() {
       <h1 className="text-red-500 text-3xl font-bold mb-4">HustleOS 🚀</h1>
       <TaskForm uid={user.uid} />
       <TaskList uid={user.uid} />
+      <IncomeForm uid={user.uid} />
+      <IncomeList uid={user.uid} />
     </div>
   );
 }
