@@ -1,18 +1,24 @@
-// src/App.jsx
-import { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "./lib/firebase";
-import Auth from "./components/Auth";
-import TaskForm from "./components/TaskForm";
-import TaskList from "./components/TaskList";
-import IncomeList from "./components/IncomeList";
-import IncomeForm from "./components/incomeform";
-import NetBar from "./components/NetBar";
-import BillForm from "./components/BillForm";
-import BillList from "./components/BillList";
+import { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './lib/firebase';
+
+import Header   from './components/Header';
+import TabBar   from './components/TabBar';
+import { Card } from './components/Card';
+
+import Auth       from './components/Auth';
+import TaskForm   from './components/TaskForm';
+import TaskList   from './components/TaskList';
+import IncomeForm from './components/incomeform';
+import IncomeList from './components/IncomeList';
+import BillForm   from './components/BillForm';
+import BillList   from './components/BillList';
+import NetBar     from './components/NetBar';
 
 export default function App() {
   const [user, loading] = useAuthState(auth);
+  const [dark, setDark] = useState(false);
+  const [tab,  setTab ] = useState('tasks');
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [billTotal,   setBillTotal]   = useState(0);
 
@@ -20,22 +26,37 @@ export default function App() {
   if (!user)    return <Auth />;
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h1 className="text-red-500 text-3xl font-bold mb-4">HustleOS 🚀</h1>
+    <div className={dark ? 'dark min-h-screen bg-gray-900 text-gray-100' :
+                           'min-h-screen bg-gray-100 text-gray-900'}>
 
-      <TaskForm uid={user.uid} />
-      <TaskList uid={user.uid} />
+      <Header dark={dark} toggleDark={() => setDark(!dark)} />
 
-      {/* Income */}
-      <IncomeForm uid={user.uid} />
-      <IncomeList uid={user.uid} onTotal={setIncomeTotal} />
+      <main className="max-w-xl mx-auto p-4">
+        <TabBar tab={tab} setTab={setTab} />
 
-      {/* Bills */}
-      <BillForm uid={user.uid} />
-      <BillList uid={user.uid} onTotal={setBillTotal} />
+        {tab === 'tasks' && (
+          <Card>
+            <TaskForm uid={user.uid} />
+            <TaskList uid={user.uid} />
+          </Card>
+        )}
 
-      {/* Net balance */}
-      <NetBar income={incomeTotal} bills={billTotal} />
+        {tab === 'finance' && (
+          <>
+            <Card>
+              <IncomeForm uid={user.uid}/>
+              <IncomeList uid={user.uid} onTotal={setIncomeTotal}/>
+            </Card>
+
+            <Card>
+              <BillForm uid={user.uid}/>
+              <BillList uid={user.uid} onTotal={setBillTotal}/>
+            </Card>
+
+            <NetBar income={incomeTotal} bills={billTotal}/>
+          </>
+        )}
+      </main>
     </div>
   );
 }
